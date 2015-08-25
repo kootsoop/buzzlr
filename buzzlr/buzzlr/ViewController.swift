@@ -75,14 +75,11 @@ class ViewController: UIViewController, FlurryAdNativeDelegate {
 */
     }
 	
-	
-
     func showAlertView(title: String, message: String) {
         var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
-
     
     func getTumblrData() {
         let TAG = "BusinessMen"
@@ -103,8 +100,10 @@ class ViewController: UIViewController, FlurryAdNativeDelegate {
             if ((jsonError) != nil) {
                 print(jsonError!.localizedDescription)
             } else {
-                print(jsonResult)
+				var myData = TumblrData(data: data)
             }
+			
+			
         }
         task.resume()
     }
