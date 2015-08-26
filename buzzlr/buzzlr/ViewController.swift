@@ -11,7 +11,6 @@ import OAuthSwift
 
 class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataSource, UITableViewDelegate {
 
-	var CellIdentifier: String = "CELL"
     var images: [UIImage]?
     var tableView: UITableView?
 
@@ -41,6 +40,7 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
         if let newTable = tableView {
             newTable.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: CellIdentifier)
             newTable.dataSource = self
+            newTable.delegate = self
             newTable.autoresizingMask = .FlexibleWidth | .FlexibleHeight
             view.addSubview(newTable)
         }
@@ -171,13 +171,12 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
         let row = indexPath.row
                 
         cell.imageView?.image = images![indexPath.row]
-        cell.imageView?.image = decorateImage("If you were a vegetable you'd be a cute-cumber.",
+        cell.imageView?.image = decorateImage(randomPickupLine(),
             originalImage: images![indexPath.row], atPoint: CGPointMake(40, 120))
         cell.imageView?.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView!.frame), 400)
         
         cell.imageView?.contentMode = .ScaleAspectFill
         
-
         return cell
     }
     
@@ -197,8 +196,12 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
         UIGraphicsBeginImageContext(resizedImage.size)
         
         let textFontAttributes = [
-            NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: textColor
+            //NSFontAttributeName: textFont,
+            //NSForegroundColorAttributeName: textColor,
+            NSStrokeColorAttributeName : UIColor.blackColor(),
+            NSForegroundColorAttributeName : UIColor.whiteColor(),
+            NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+            NSStrokeWidthAttributeName : -3
         ]
         
 		var rect: CGRect = CGRectMake(0, 0, resizedImage.size.width, resizedImage.size.height)
@@ -209,21 +212,17 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
         
         return newImage
     }
-	
-	func imageResize(imageObj:UIImage)-> UIImage {
-		var scaleUp = 320 / imageObj.size.width
-		
-		var sizeChange = CGSizeMake(320.0, scaleUp*imageObj.size.height)
-		
-		let hasAlpha = false
-		let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
-		
-		UIGraphicsBeginImageContextWithOptions(sizeChange, !hasAlpha, scale)
-		imageObj.drawInRect(CGRect(origin: CGPointZero, size: sizeChange))
-		
-		let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-		UIGraphicsEndImageContext() // !!!
-		return scaledImage
-	}
+      // MARK: - Pickup Line Helper Method
+    
+    func randomPickupLine() -> String {
+        var pickupLines: [String] = ["I wanna live in your socks so I can be with you every step of the way.", "Did you invent the airplane? Cause you seem Wright for me.", "I was feeling a little off today, but you definitely turned me on.", "If you were a vegetable you'd be a cute-cumber.", "Does your left eye hurt? Because you've been looking right all day.", "You look cold. Want to use me as a blanket?", "I'm not drunk, I'm just intoxicated by YOU.", "My doctor says I'm lacking Vitamin U.", "Do you work at Starbucks? Because I like you a latte.", "I'm not actually this tall. I'm sitting on my wallet."]
+        
+        var randomLine = Int(arc4random_uniform(UInt32(pickupLines.count)))
+        
+        return pickupLines[randomLine]
+    
+}
+    
+    
 }
 
