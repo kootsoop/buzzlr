@@ -11,14 +11,14 @@ import OAuthSwift
 
 class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataSource, UITableViewDelegate {
 
+	var CellIdentifier: String = "CELL"
     var images: [UIImage]?
     var tableView: UITableView?
-    let CellIdentifier: String = "CELL"
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.images = [UIImage]()
+
+		self.images = [UIImage]()
         
         let OAUTH = "OAuthData"
         let BUZZLR = "buzzlr"
@@ -33,11 +33,13 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
            autoLoginTumblr()
         }
         
-        var frame = CGRectMake(10, 0, self.view.bounds.width - 10, self.view.bounds.height)
+        var frame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height)
         tableView = UITableView(frame: frame, style: .Plain)
+		
+		tableView?.delegate = self
         
         if let newTable = tableView {
-            newTable.registerClass(ImageTableViewCell.classForCoder(), forCellReuseIdentifier: CellIdentifier)
+            newTable.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: CellIdentifier)
             newTable.dataSource = self
             newTable.autoresizingMask = .FlexibleWidth | .FlexibleHeight
             view.addSubview(newTable)
@@ -161,11 +163,10 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let numberInArray = images!.count
         return numberInArray
-        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: ImageTableViewCell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath) as! ImageTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath) as! UITableViewCell
 
         let row = indexPath.row
                 
@@ -181,7 +182,7 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 400.0
+        return 200.0
     }
 
     
@@ -206,8 +207,7 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
         
         return newImage
     }
-    
-    
+	
     
 }
 
