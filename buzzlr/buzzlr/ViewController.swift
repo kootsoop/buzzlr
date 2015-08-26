@@ -182,7 +182,7 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 200.0
+        return 320.0
     }
 
     
@@ -191,16 +191,18 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
     func decorateImage(pickupLine:NSString, originalImage: UIImage, atPoint: CGPoint) -> UIImage {
         var textColor: UIColor = UIColor.whiteColor()
         var textFont: UIFont = UIFont(name: "Baskerville", size: 40)!
+		
+		var resizedImage = imageResize(originalImage)
         
-        UIGraphicsBeginImageContext(originalImage.size)
+        UIGraphicsBeginImageContext(resizedImage.size)
         
         let textFontAttributes = [
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: textColor
         ]
         
-        originalImage.drawInRect(CGRectMake(0, 0, originalImage.size.width, originalImage.size.height))
-        var rect: CGRect = CGRectMake(atPoint.x, atPoint.y, originalImage.size.width, originalImage.size.height)
+		var rect: CGRect = CGRectMake(0, 0, resizedImage.size.width, resizedImage.size.height)
+        resizedImage.drawInRect(rect)
         pickupLine.drawInRect(rect, withAttributes: textFontAttributes)
         var newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -208,6 +210,20 @@ class ViewController: UIViewController, FlurryAdNativeDelegate, UITableViewDataS
         return newImage
     }
 	
-    
+	func imageResize(imageObj:UIImage)-> UIImage {
+		var scaleUp = 320 / imageObj.size.width
+		
+		var sizeChange = CGSizeMake(320.0, scaleUp*imageObj.size.height)
+		
+		let hasAlpha = false
+		let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+		
+		UIGraphicsBeginImageContextWithOptions(sizeChange, !hasAlpha, scale)
+		imageObj.drawInRect(CGRect(origin: CGPointZero, size: sizeChange))
+		
+		let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+		UIGraphicsEndImageContext() // !!!
+		return scaledImage
+	}
 }
 
